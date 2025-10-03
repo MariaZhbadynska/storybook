@@ -1,0 +1,141 @@
+:root {
+  --card: #0f1524;
+  --card-2: #0b1020;
+  --text: #e8edf6;
+  --muted: #96a1b1;
+  --border: #26324a;
+  --accent: rgba(106, 166, 255, 0.5);
+  --error: #ef4444;
+  --radius: 14px;
+  --shadow: 0 12px 28px rgba(0, 0, 0, 0.4);
+  --ring: 0 0 0 4px rgba(106, 166, 255, 0.18);
+  --ts: 180ms ease;
+  --ts-slow: 260ms cubic-bezier(.22, .61, .36, 1);
+}
+
+
+.sidebar {
+  width: 260px;
+  color: var(--text);
+  background:
+    radial-gradient(120% 120% at 0% 0%, #1b2342 0%, transparent 46%),
+    linear-gradient(180deg, var(--card) 0%, var(--card-2) 100%);
+  border-right: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.list,
+.subList {
+  margin: 0;
+  padding: 6px;
+  list-style: none;
+}
+
+.item {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.itemRow {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 6px;
+
+  border: 1px solid transparent;
+  border-radius: 12px;
+  transition: background var(--ts), border-color var(--ts), transform 120ms ease;
+}
+
+.btn {
+  appearance: none;
+  background: transparent;
+  border: 0;
+  color: inherit;
+  font: inherit;
+  padding: 12px 12px;
+  text-align: left;
+  cursor: pointer;
+  border-radius: 12px;
+  outline: none;
+}
+
+.itemRow:hover {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: #232c45;
+}
+
+.itemRow:has(.btn:focus-visible) {
+  box-shadow: var(--ring);
+  border-color: var(--accent);
+  transform: translateY(-1px);
+}
+
+.arrowBtn {
+  display: inline-grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  margin-right: 6px;
+  background: linear-gradient(180deg, #1a2140, #121a2b);
+  border: 1px solid #22304a;
+  border-radius: 10px;
+  color: var(--muted);
+  cursor: pointer;
+  transition: transform var(--ts), color var(--ts), border-color var(--ts);
+}
+
+.itemRow:hover .arrowBtn {
+  color: var(--text);
+  border-color: var(--accent);
+}
+
+.chev {
+  display: block;
+  transform: rotate(0deg);
+  transition: transform var(--ts);
+}
+
+.open .chev {
+  transform: rotate(90deg);
+}
+
+.subList {
+  padding: 0 6px 6px 6px;
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transform: translateX(6px);
+  transition:
+    max-height var(--ts-slow),
+    opacity var(--ts),
+    transform var(--ts);
+  border-left: 1px dashed #26324a;
+  margin-left: 8px;
+  border-radius: 0 0 12px 12px;
+}
+
+.show {
+  max-height: 600px;
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.level0 .btn {
+  padding-left: 14px;
+}
+
+.level1 .btn {
+  padding-left: 24px;
+}
+
+.level2 .btn {
+  padding-left: 34px;
+}
+
+.active .itemRow {
+  background: rgba(106, 166, 255, 0.08);
+  border-color: var(--accent);
+}

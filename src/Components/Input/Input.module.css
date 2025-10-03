@@ -1,0 +1,132 @@
+:root {
+    --bg: #0b0d12;
+    --card: #111623;
+    --card-2: #0e1320;
+    --text: #e8edf6;
+    --muted: #9aa4b2;
+    --border: #28334a;
+    --focus-ring: 0 0 0 4px rgba(106, 166, 255, 0.22);
+    --radius: 14px;
+    --shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
+    --error: #ef4444;
+    --pad-y: 12px;
+    --pad-x: 14px;
+    --ts: 160ms ease;
+    --ts-fast: 120ms ease;
+  }
+  
+  .root {
+    display: grid;
+    gap: 8px;
+    color: var(--text);
+  }
+  
+  .label {
+    font-size: 13px;
+    color: var(--muted);
+    letter-spacing: .2px;
+    user-select: none;
+  }
+  
+  .req {
+    color: var(--error);
+  }
+  
+  .fieldWrap {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    align-items: center;
+    background:
+      radial-gradient(120% 120% at 0% 0%, #1a2140 0%, transparent 45%) ,
+      linear-gradient(180deg, var(--card) 0%, var(--card-2) 100%);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    transition: border-color var(--ts), box-shadow var(--ts), transform var(--ts-fast);
+    will-change: transform, box-shadow, border-color;
+  }
+  
+  .fieldWrap:focus-within {
+    border-color: rgba(106, 166, 255, 0.65);
+    box-shadow: var(--focus-ring), var(--shadow);
+    transform: translateY(-1px);
+  }
+  
+  .input {
+    width: 100%;
+    padding: var(--pad-y) var(--pad-x);
+    background: transparent;
+    border: 0;
+    color: var(--text);
+    font-size: 14px;
+    outline: none;
+  }
+  
+  .input::placeholder {
+    color: color-mix(in oklab, var(--muted) 82%, #fff 0%);
+    opacity: .9;
+  }
+  
+  .ghostBtn {
+    display: inline-grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    margin-right: 6px;
+    background:
+      linear-gradient(180deg, #1b2236, #131a2b);
+    border: 1px solid #24314a;
+    border-radius: 10px;
+    color: var(--muted);
+    cursor: pointer;
+    transition: transform var(--ts-fast), color var(--ts-fast), border-color var(--ts-fast), background var(--ts-fast);
+  }
+  
+  .ghostBtn:hover {
+    color: var(--text);
+    border-color: rgba(106, 166, 255, .45);
+    transform: translateY(-1px);
+  }
+  
+  .ghostBtn:active {
+    transform: translateY(0);
+  }
+  
+  .disabled {
+    opacity: .6;
+    pointer-events: none;
+    filter: grayscale(.1);
+  }
+  
+  .helper {
+    font-size: 12px;
+    line-height: 1.4;
+    color: var(--muted);
+  }
+  
+  .helperError {
+    color: var(--error);
+  }
+  
+  .error .fieldWrap {
+    border-color: color-mix(in oklab, var(--error) 78%, #000 22%);
+    box-shadow:
+      0 0 0 3px rgba(239, 68, 68, 0.14),
+      var(--shadow);
+  }
+  
+  .fieldWrap > .input + .ghostBtn {
+    position: relative;
+  }
+  
+  .fieldWrap > .input + .ghostBtn::before {
+    content: "";
+    position: absolute;
+    left: -6px;
+    top: 8px;
+    bottom: 8px;
+    width: 1px;
+    background: linear-gradient(180deg, transparent, #28334a, transparent);
+    pointer-events: none;
+  }
+  
