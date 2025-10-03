@@ -16,8 +16,8 @@ export default function SidebarMenu({ items, onSelect }: SidebarMenuProps) {
   return (
     <nav className={styles.sidebar} aria-label="Sidebar">
       <ul className={styles.list}>
-        {items.map((item) => (
-          <SidebarItem key={item.id} item={item} level={0} onSelect={onSelect} />
+        {items.map((it) => (
+          <SidebarItem key={it.id} item={it} level={0} onSelect={onSelect} />
         ))}
       </ul>
     </nav>
@@ -34,23 +34,25 @@ function SidebarItem({
   onSelect?: (id: string) => void;
 }) {
   const [open, setOpen] = useState(false);
-  const hasChildren = !!(item.children && item.children.length);
-  const sublistId = useId();
+  const subId = useId();
 
-  const toggle = () => setOpen((s) => !s);
-  const handleClick = () => {
-    if (hasChildren) toggle();
-    else onSelect?.(item.id);
-  };
+  const children = item.children && item.children.length ? item.children : null;
+  const hasChildren = !!children;
+
+  const handleItem = () => (hasChildren ? setOpen((v) => !v) : onSelect?.(item.id));
+
+  const liClass = `${styles.item} ${styles[`level${level}`]}`;
+  const arrowClass = `${styles.arrowBtn} ${open ? styles.open : ""}`;
+  const subListClass = `${styles.subList} ${open ? styles.show : ""}`;
 
   return (
-    <li className={`${styles.item} ${styles[`level${level}`]}`}>
+    <li className={liClass}>
       <div className={styles.itemRow}>
         <button
           className={styles.btn}
-          onClick={handleClick}
+          onClick={handleItem}
           aria-expanded={hasChildren ? open : undefined}
-          aria-controls={hasChildren ? sublistId : undefined}
+          aria-controls={hasChildren ? subId : undefined}
         >
           {item.label}
         </button>
@@ -58,11 +60,9 @@ function SidebarItem({
         {hasChildren && (
           <button
             type="button"
-            className={`${styles.arrowBtn} ${open ? styles.open : ""}`}
+            className={arrowClass}
             aria-label={open ? "Згорнути" : "Розгорнути"}
-            aria-expanded={open}
-            aria-controls={sublistId}
-            onClick={toggle}
+            onClick={() => setOpen((v) => !v)}
           >
             <span className={styles.chev}>▶</span>
           </button>
@@ -70,16 +70,12 @@ function SidebarItem({
       </div>
 
       {hasChildren && (
-        <ul
-          id={sublistId}
-          className={`${styles.subList} ${open ? styles.show : ""}`}
-          role="group"
-        >
-          {item.children!.map((child) => (
+        <ul id={subId} className={subListClass} role="group">
+          {children!.map((child) => (
             <SidebarItem
               key={child.id}
               item={child}
-              level={Math.min(level + 1, 2)}
+              level={level < 2 ? level + 1 : 2}
               onSelect={onSelect}
             />
           ))}

@@ -38,28 +38,25 @@ export default function Input({
   const [showPwd, setShowPwd] = useState(false);
 
   const isPassword = type === "password";
-  const actualType = isPassword ? (showPwd ? "text" : "password") : type;
-  const hasError = Boolean(errorText);
+  const hasError = !!errorText;
+  const actualType = isPassword && !showPwd ? "password" : isPassword && showPwd ? "text" : type;
+  const descId = helperText || errorText ? `${id}-desc` : undefined;
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const rootClass = `${styles.root} ${hasError ? styles.error : ""} ${disabled ? styles.disabled : ""}`.trim();
+
+  const change = (e: React.ChangeEvent<HTMLInputElement>) => {
     const next = e.target.value;
     setVal(next);
     onChange?.(next);
   };
 
-  const handleClear = () => {
+  const clear = () => {
     setVal("");
     onChange?.("");
   };
 
   return (
-    <div
-      className={[
-        styles.root,
-        hasError ? styles.error : "",
-        disabled ? styles.disabled : "",
-      ].join(" ")}
-    >
+    <div className={rootClass}>
       {label && (
         <label htmlFor={id} className={styles.label}>
           {label} {required && <span className={styles.req}>*</span>}
@@ -72,13 +69,13 @@ export default function Input({
           className={styles.input}
           type={actualType}
           value={val}
-          onChange={handleChange}
+          onChange={change}
           placeholder={placeholder}
           disabled={disabled}
           required={required}
           name={name}
           aria-invalid={hasError || undefined}
-          aria-describedby={helperText || errorText ? `${id}-desc` : undefined}
+          aria-describedby={descId}
           {...inputProps}
         />
 
@@ -87,7 +84,7 @@ export default function Input({
             type="button"
             className={styles.ghostBtn}
             onClick={() => setShowPwd((s) => !s)}
-            aria-label={showPwd ? "Скрыть пароль" : "Показать пароль"}
+            aria-label={showPwd ? "Сховати пароль" : "Показати пароль"}
             title={showPwd ? "Hide password" : "Show password"}
           >
             {showPwd ? <EyeOffIcon /> : <EyeIcon />}
@@ -98,8 +95,8 @@ export default function Input({
           <button
             type="button"
             className={styles.ghostBtn}
-            onClick={handleClear}
-            aria-label="Очистить поле"
+            onClick={clear}
+            aria-label="Очистити поле"
             title="Clear"
           >
             <CloseIcon />
@@ -108,12 +105,8 @@ export default function Input({
       </div>
 
       {(helperText || errorText) && (
-        <div id={`${id}-desc`} className={styles.helper} aria-live="polite">
-          {errorText ? (
-            <span className={styles.helperError}>{errorText}</span>
-          ) : (
-            helperText
-          )}
+        <div id={descId} className={styles.helper} aria-live="polite">
+          {errorText ? <span className={styles.helperError}>{errorText}</span> : helperText}
         </div>
       )}
     </div>
